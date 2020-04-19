@@ -42,34 +42,27 @@ def home():
     
 @app.route('/analyze', methods=['GET', 'POST'])
 def analyze():
-    print('Starting evaluation phrase')
+    print('Bắt đầu trang điểm nè...')
     if request.method == 'POST':
         content = request.get_data(as_text = True)
         content = str(content)
-        # image = cv2.imread(os.path.join(app.config['UPLOAD_FOLDER'], content))
-        # image = cv2.resize(image, dsize=(256, 256))
-        # image = np.expand_dims(image, axis=0)
-        # image = imagenet_utils.preprocess_input(image)
-        prediction, duration = demo.test(os.path.join(app.config['UPLOAD_FOLDER'], content))      
-        # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], content))
-        
-        # below doesn't work properly - deleted before image loads for user
-        
-        # os.remove(face_location)
-        # face_location = os.path.join('./static', face_)
-        # cv2.imwrite(os.path.join(face_location, prediction))
+        prediction, duration = demo.test(os.path.join(app.config['UPLOAD_FOLDER'], content))
+        prediction = cv2.normalize(prediction, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
+        prediction = prediction.astype(np.uint8)
+        cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], content), cv2.cvtColor(prediction, cv2.COLOR_RGB2BGR))
         # print('Done in {} s'.format(duration))
-        return str(duration)
+        feedback = 'Chương trình mất <b>{}s</b> để hoàn thành trang điểm'.format(duration)
+        return jsonify(msg = feedback)
     
 @app.route('/uploaded', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
-            feedback = 'No file found.'
+            feedback = 'Vui lòng chọn một file ảnh.'
             return jsonify(msg = feedback, success = False)
         file = request.files['file']
         if file.filename == '':
-            feedback = 'No file name.'
+            feedback = 'Ảnh không có tên. Vui lòng thử lại với ảnh có tên ạ.'
             return jsonify(msg = feedback, success = False)
         if file and allowed_file(file.filename):
             millis = int(round(time.time() * 1000))
@@ -78,8 +71,8 @@ def upload_file():
             f = request.files['file']
             image_location = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             f.save(image_location)
-            print('Saved upload file :D')
-            face_filename = 'F' + filename
+            # print('Saved upload file :D')
+            face_filename = filename
                        
             imageFace = cv2.imread(image_location)
             if imageFace is not None:
@@ -94,38 +87,43 @@ def upload_file():
             )
 
             print("Found {0} faces!".format(len(faces)))
-            for (x, y, w, h) in faces:
-                cv2.rectangle(imageFace, (x, y), (x+w, y+h), (0, 255, 0), 2)
             if len(faces) == 1:
-                feedback = '1 face found!'
+                feedback = '1 khuôn mặt, bắt đầu thực hiện trang điểm...'
+                for (x, y, w, h) in faces:
+                    ext = [w, h][np.argmax([w, h])]
+                    ext=int(ext*1.2)
+                    x=int(x-0.5*int(ext-w))
+                    if x < 0:
+                        x =0
+                    if y < 0:
+                        y=0
+                    imageFace= imageFace[y:y+ext, x:x+ext, :]
+
             elif len(faces) == 0:
-                feedback = 'No faces found - running analysis anyway.'
+                feedback = 'Không tìm thấy khuôn mặt nào... Trang điểm MÙ MỜ'
             else:
-                feedback = 'More than 1 face found - running analysis anyway.'
-                
+                feedback = 'Úm ba la xì bùa, chọn 1 khuôn mặt và trang điểm...'
+                for (x, y, w, h) in faces[0:1]:
+                    ext = [w, h][np.argmax([w, h])]
+                    ext=int(ext*1.2)
+                    x=int(x-0.5*int(ext-w))
+                    if x < 0:
+                        x =0
+                    if y < 0:
+                        y=0
+                    imageFace= imageFace[y:y+ext, x:x+ext, :]
             imageFace = cv2.resize(imageFace, dsize=(350, 350))
-            # imageFace = cv2.cvtColor(imageFace, cv2.COLOR_BGR2RGB)
+            imageFace = cv2.cvtColor(imageFace, cv2.COLOR_BGR2RGB)
             
             im = Image.fromarray(imageFace)
             face_location = os.path.join(app.config['UPLOAD_FOLDER'], face_filename)
             im.save(face_location)
             face_location = os.path.join('./static', face_filename)
-            print('Testing on ', face_location)
-            prediction, duration = demo.test(image_location)      
-        # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], content))
-        
-        # below doesn't work properly - deleted before image loads for user
-        
-        # os.remove(face_location)
-        # face_location = os.path.join('./static', face_)
-            prediction = cv2.normalize(prediction, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
-            prediction = prediction.astype(np.uint8)
-            cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], face_filename), cv2.cvtColor(prediction, cv2.COLOR_RGB2BGR))
-            print('Done in {} s'.format(duration))
+
             return jsonify(original_image = filename, face_image = face_location, msg = feedback, success = True)
                 
         else:
-            feedback = 'It seems you haven\'t uploaded an image. Your file must be of type jpg or png.'
+            feedback = 'Chỉ chấp nhận file ảnh có định dạng <b>JPG, PNG</b> nha. Vui lòng thử lại ạ.'
             return jsonify(msg = feedback, success = False)
                                         
 if __name__ == "__main__":

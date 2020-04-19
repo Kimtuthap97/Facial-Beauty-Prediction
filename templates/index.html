@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+<!-- <h3>Welcome to the real-time HTML editor!</h3>
+<p>Type HTML in the textarea above, and it will magically appear in the fra<!DOCTYPE html -->
 <html>
 <head>
-  <title>Facial Beauty Prediction</title>
+  <title>AI MakeUp</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href= "{{ url_for('static',filename='app.css') }}">
-  
+  <link rel="icon" href="https://images.squarespace-cdn.com/content/v1/5c552c679b8fe802459eb3f7/1553883379854-511PFZG3HQ8CAO3YQXAM/ke17ZwdGBToddI8pDm48kLyCCerEZijcD8Wbcg63XnxZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVFR1GrYiiHKNxsQhep12TIpsrmuWvPMTgLQtvdiW-n5GN1lH3P2bFZvTItROhWrBJ0/shiba.png">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   
 </head>
@@ -14,7 +15,7 @@
 
     <div id="maintable">
     
-    <h2>How Attractive Are You In The Eyes Of AI?</h2>
+    <h2>💄💻 Let AI do your M A K E U P 💻💄</h2>
     
     <hr>
 
@@ -35,10 +36,17 @@
             
             <div id = "userinfo">
                                     
-            <p>Upload a selfie to see what the machine learning model thinks of you! This model was trained to evaluate beauty by analyzing thousands of profile photos, and will examine every individual pixel of the image you upload to evaluate its overall commonality with best and worst rated selfies. Please note this was built for <b>entertainment and research purposes only</b>, so do not take the result too seriously.</p>
-            
-            <p>Get in touch: contact (at) dataanalysis (dot) world</p>
-            
+            <p>Xin chào &#127804;&#127804;&#127804;,</p>
+            <p>Đây là bản <b>DEMO</b> Chương trình Trang điểm sử dụng Học sâu.</p>
+            <p>Xin mời bạn <b>Upload</b> một ảnh selfie của mình lên để Hệ thống thực hiện Trang điểm cho bạn 🤳📱😊.</p>
+            <p>Xin <b>CHÚ Ý</b> chọn hình ảnh theo các tiêu chí như sau:</p>
+            <ul>
+                <li>Có ít nhất <b>1 khuôn mặt</b>. Nếu trong hình có nhiều hơn một khuôn mặt, máy tính sẽ chọn ngẫu nhiên một khuôn mặt để thực hiện trang điểm</li>
+                <li>Khuôn mặt nên <b>rõ ràng, không bị che khuất</b> hay có vật cản. VD: đeo kính râm 😎, khẩu trang 😷, etc.</li>
+                <li>Biểu cảm khuôn mặt nên <b>trung hòa 😡😭😫.</b></li>
+            </ul>
+            <p>Mô hình vẫn đang trong quá trình thử nghiệm, vì vậy có thể chưa được tốt 👍. Pls don't take this serious 👏</p>
+            <i class="fab fa-linkedin-in"></i>
             </div>
                 
             </div>
@@ -46,13 +54,18 @@
     </div>
     
     <br>
-    
+    <center>
     <h3>Acknowledgements and Source Code</h3>
     
     <br>
     
-    <p>The machine learning model used here was trained with the assistance of the SCUT-FBP5500 dataset: see the paper at <a href="https://arxiv.org/abs/1801.06345">https://arxiv.org/abs/1801.06345</a>. The code for this website (built using <a href="http://flask.pocoo.org/">Flask</a>), along with an example of training the machine learning model, is on my github <a href="https://github.com/wanshun123/Facial-Beauty-Prediction">here</a>.
+    <p>Mô hình được lấy cảm hứng từ bài báo gốc <a href="https://dl.acm.org/doi/10.1145/3240508.3240618">BeautyGAN</a>. Website được viết dựa trên <a href="https://github.com/Kimtuthap97/Facial-Beauty-Prediction">Facial Beauty Prediction</a>, host server sử dụng <a href="https://www.pythonanywhere.com/">PythonEverywhere</a>. Do <b>giới hạn về CHI PHÍ</b>, mình chọn gói website chỉ hỗ trợ CPU 3GB RAM và 5GB disk, nôm na tương đương xử lý nhanh được <b>500 ảnh</b>/ ngày. Mong mọi người thông cảm ạ.</p>
+
+    <p>Source code được viết bằng Pytorch, có thể tìm thấy tại <a href="https://github.com/Kimtuthap97/BeautyGAN_pytorch">github của mình</a>. Dữ liệu huấn luyện được lấy tại Project Page của bài báo.</p>
+    <p><img src="/static/shibe_ok.gif" alt="animated" loop=infinite/></p>
+    <p>Kết nối với mình tại <a href="https://www.facebook.com/kimtuthap97">Facebook </a><a href="https://www.linkedin.com/in/kimtuthap97/">LinkedIn</a></p>
     
+    </center>
     </div>
 
 </body>
@@ -64,7 +77,7 @@ $('form').submit(function(e){
     let imgPlaceholder = document.getElementById('image-placeholder')
     
     let userinfo = document.getElementById('userinfo')
-        userinfo.innerHTML = '<loadingtext><img src="/static/spinner.gif" width="200px" height="200px" class ="center-block"><p><i>Processing image...</i></p></loadingtext>'
+        userinfo.innerHTML = '<loadingtext><img src="/static/shibe_flo.gif" width="200px" height="200px" class ="center-block"><p><i>Tải ảnh lên server... &#9760;</i></p></loadingtext>'
         
     $.ajax({
         url: $(this).attr('action'),
@@ -81,30 +94,31 @@ $('form').submit(function(e){
             face_location = res['face_image']
             original_image = res['original_image']
                     
-            imgPlaceholder.innerHTML = '<img src="/static/qm.jpg">'
+            imgPlaceholder.innerHTML = '<img src="/static/shiba_makeup.jpg" width="350px" height="350px">'
                     
-            userinfo.innerHTML = '<loadingtext><img src="/static/spinner.gif" width="200px" height="200px" class ="center-block"><p><i>Compiling analysis...</i></p><p><b>' + res['msg'] + '</b></p></loadingtext>'
+            userinfo.innerHTML = '<loadingtext><img src="/static/shibe_flo.gif" width="200px" height="200px" class ="center-block"><p><i>Bắt đầu phân tích ảnh... &#9749;</i></p><p><b>' + res['msg'] + '</b></p></loadingtext>'
             
             $.ajax({
-            url: "/analyze",
-            type: 'POST',
-            data: original_image,
-            cache: false,
-            contentType: false,
-            processData: false 
-        }).done(function(res){
-            imgPlaceholder.innerHTML = '<img src="' + face_location + '">'
-            userinfo.innerHTML = res
-        })
-            
-        } else {
+                url: "/analyze",
+                type: 'POST',
+                data: original_image,
+                cache: false,
+                contentType: false,
+                processData: false 
+            }).done(function(res){
+                imgPlaceholder.innerHTML = '<img src="' + face_location + '">'
+                userinfo.innerHTML = '<loadingtext><p>' + res['msg'] + '</p><img src="/static/pat_shibe.gif" width="100px" height="100px" class ="center-block"><p>Bạn cảm thấy thế nào?</p><p><i>Chia sẻ cảm nghĩ với mình nha! <a href="http://m.me/kimtuthap97">💌💌💌</a></i></p></loadingtext>'
+                    })
                 
-            userinfo.innerHTML = '<b>' + res['msg'] + '</b>'
-        
-        }
+            } else {
+                    
+                userinfo.innerHTML = '<loadingtext><img src="/static/angry.gif" width="150px" height="150px" class ="center-block"><p>' + res['msg'] + '</p></loadingtext>'
+            
+            }
         
     })
 })
 </script>
-
 </html>
+
+    

@@ -20,10 +20,11 @@ def crop_face(img):
     
 #     print('img.shape', img.shape)
     faces=detector.detect_faces(img)
+    del detector
 #     print(faces)
     if len(faces)==0:
         print('{0}: No face found')
-        return img[0:1, 0:1, 0:1]
+        return cv2.resize(img, (256, 256))
     else:
         faces=faces[0]['box']
         x, y, z, k = faces[0], faces[1], faces[2], faces[3]
@@ -65,17 +66,17 @@ def to_var(x, requires_grad=True):
     
     output: fake_A (256x256x3)
 """
-def test(img_A, img_B='vFG840.png', path='152_1260_G.pth'):
+def test(img_A, img_B='makeup2.png', path='245_2520_G.pth'):
     start = time.time()
     transform = transforms.Compose([transforms.Resize(256),
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])])
     transform_mask = transforms.Compose([transforms.Resize(256, interpolation=PIL.Image.NEAREST),ToTensor])
-    img_A = cv2.resize(crop_face(img_A), (256, 256))
-    # print(img_A)
-    img_A = Image.fromarray(img_A)
-    # img_A = img_A.resize((256, 256))
-    img_A = transform(img_A)
+    # img_A = cv2.resize(crop_face(img_A), (256, 256))
+    # # img_A = Image.open(img_A)
+    # img_A = Image.fromarray(img_A)
+    # img_A = transform(img_A)
+    img_A = transform(Image.open(os.path.join(FOLDER, img_A)))
     img_B = transform(Image.open(os.path.join(FOLDER, img_B)))
     # Load trained parameters
 
@@ -93,10 +94,12 @@ def test(img_A, img_B='vFG840.png', path='152_1260_G.pth'):
     # Get makeup result
     fake_A, fake_B = model(real_org, real_ref)
     # rec_B, rec_A = model(fake_B, fake_A)
+    del model
     result=np.zeros((256, 256, 3))
     result[:, :, 0]=de_norm(fake_A.detach()[0]).numpy()[0]
     result[:, :, 1]=de_norm(fake_A.detach()[0]).numpy()[1]
     result[:, :, 2]=de_norm(fake_A.detach()[0]).numpy()[2]
+    result = cv2.resize(result, (350, 350))
     duration = round(time.time()-start, 3)
     print('Done in {0} s'.format(duration))
     return result, duration
