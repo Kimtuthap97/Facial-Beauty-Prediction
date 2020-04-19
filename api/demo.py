@@ -6,40 +6,11 @@ from PIL import Image
 from torchvision import transforms
 import numpy as np
 import PIL
-import os 
+import os
 from os.path import join, dirname, realpath
-from mtcnn import MTCNN
 import cv2
 
 FOLDER = join(dirname(realpath(__file__)))
-
-def crop_face(img):
-    img = cv2.cvtColor(cv2.imread(img), cv2.COLOR_BGR2RGB)
-    # print(img)
-    detector = MTCNN()
-    
-#     print('img.shape', img.shape)
-    faces=detector.detect_faces(img)
-    del detector
-#     print(faces)
-    if len(faces)==0:
-        print('{0}: No face found')
-        return cv2.resize(img, (256, 256))
-    else:
-        faces=faces[0]['box']
-        x, y, z, k = faces[0], faces[1], faces[2], faces[3]
-#         print('x, y, z, k', x, y, z, k)
-        ext = [z, k][np.argmax([z, k])]
-        ext=int(ext*1.2)
-        x=int(x-0.5*int(ext-z))
-        if x < 0:
-            x =0
-        if y < 0:
-            y=0
-#         plt.imshow(temp[y:y+ext, x:x+ext, :])
-        print('Done cropping faces')
-        # print(cv2.cvtColor(img[y:y+ext, x:x+ext, :], cv2.COLOR_RGB2BGR))
-        return img[y:y+ext, x:x+ext, :]
 
 def ToTensor(pic):
     img = torch.from_numpy(np.array(pic, np.int16, copy=False))
@@ -72,14 +43,8 @@ def test(img_A, img_B='makeup2.png', path='245_2520_G.pth'):
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])])
     transform_mask = transforms.Compose([transforms.Resize(256, interpolation=PIL.Image.NEAREST),ToTensor])
-    # img_A = cv2.resize(crop_face(img_A), (256, 256))
-    # # img_A = Image.open(img_A)
-    # img_A = Image.fromarray(img_A)
-    # img_A = transform(img_A)
     img_A = transform(Image.open(os.path.join(FOLDER, img_A)))
     img_B = transform(Image.open(os.path.join(FOLDER, img_B)))
-    # Load trained parameters
-
     model = net.Generator_branch(64, 6)
     if torch.cuda.is_available():
         model.load_state_dict(torch.load(os.path.join(FOLDER, path)))
@@ -100,8 +65,10 @@ def test(img_A, img_B='makeup2.png', path='245_2520_G.pth'):
     result[:, :, 1]=de_norm(fake_A.detach()[0]).numpy()[1]
     result[:, :, 2]=de_norm(fake_A.detach()[0]).numpy()[2]
     result = cv2.resize(result, (350, 350))
+    result = cv2.normalize(result, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
+    result = result.astype(np.uint8)
     duration = round(time.time()-start, 3)
-    print('Done in {0} s'.format(duration))
+    # print('Done in {0} s'.format(duration))
     return result, duration
 
 if __name__ == "__main__":
