@@ -42,7 +42,7 @@ def home():
     
 @app.route('/analyze', methods=['GET', 'POST'])
 def analyze():
-    print('Bắt đầu trang điểm nè...')
+    # print('Bắt đầu trang điểm nè...')
     if request.method == 'POST':
         content = request.get_data(as_text = True)
         content = str(content)

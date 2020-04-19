@@ -59,11 +59,11 @@
     
     <br>
     
-    <p>Mô hình được lấy cảm hứng từ bài báo gốc <a href="https://dl.acm.org/doi/10.1145/3240508.3240618">BeautyGAN</a>. Website được viết dựa trên <a href="https://github.com/Kimtuthap97/Facial-Beauty-Prediction">Facial Beauty Prediction</a>, host server sử dụng <a href="https://www.pythonanywhere.com/">PythonEverywhere</a>. Do <b>giới hạn về CHI PHÍ</b>, mình chọn gói website chỉ hỗ trợ CPU 3GB RAM và 5GB disk, nôm na tương đương xử lý nhanh được <b>500 ảnh</b>/ ngày. Mong mọi người thông cảm ạ.</p>
+    <p>Mô hình được lấy cảm hứng từ bài báo gốc <a target="_blank" rel="noopener noreferrer"  href="https://dl.acm.org/doi/10.1145/3240508.3240618">BeautyGAN</a>. Website được viết dựa trên <a target="_blank" rel="noopener noreferrer" href="https://github.com/Kimtuthap97/Facial-Beauty-Prediction">Facial Beauty Prediction</a>, host server sử dụng <a target="_blank" rel="noopener noreferrer" href="https://www.pythonanywhere.com/">PythonEverywhere</a>. Do <b>giới hạn về CHI PHÍ</b>, mình chọn gói website chỉ hỗ trợ CPU 3GB RAM và 5GB disk, nôm na tương đương xử lý nhanh được <b>500 ảnh</b>/ ngày. Mong mọi người thông cảm ạ.</p>
 
-    <p>Source code được viết bằng Pytorch, có thể tìm thấy tại <a href="https://github.com/Kimtuthap97/BeautyGAN_pytorch">github của mình</a>. Dữ liệu huấn luyện được lấy tại Project Page của bài báo.</p>
+    <p>Source code được viết bằng Pytorch, có thể tìm thấy tại <a target="_blank" rel="noopener noreferrer" href="https://github.com/Kimtuthap97/BeautyGAN_pytorch">github của mình</a>. Dữ liệu huấn luyện được lấy tại Project Page của bài báo.</p>
     <p><img src="/static/shibe_ok.gif" alt="animated" loop=infinite/></p>
-    <p>Kết nối với mình tại <a href="https://www.facebook.com/kimtuthap97">Facebook </a><a href="https://www.linkedin.com/in/kimtuthap97/">LinkedIn</a></p>
+    <p>Kết nối với mình tại <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/kimtuthap97">Facebook </a><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/kimtuthap97/">LinkedIn</a></p>
     
     </center>
     </div>
@@ -107,7 +107,7 @@ $('form').submit(function(e){
                 processData: false 
             }).done(function(res){
                 imgPlaceholder.innerHTML = '<img src="' + face_location + '">'
-                userinfo.innerHTML = '<loadingtext><p>' + res['msg'] + '</p><img src="/static/pat_shibe.gif" width="100px" height="100px" class ="center-block"><p>Bạn cảm thấy thế nào?</p><p><i>Chia sẻ cảm nghĩ với mình nha! <a href="http://m.me/kimtuthap97">💌💌💌</a></i></p></loadingtext>'
+                userinfo.innerHTML = '<loadingtext><p>' + res['msg'] + '</p><img src="/static/pat_shibe.gif" width="100px" height="100px" class ="center-block"><p>Bạn cảm thấy thế nào?</p><p><i>Chia sẻ cảm nghĩ với mình nha! <a target="_blank" rel="noopener noreferrer" href="http://m.me/kimtuthap97">💌💌💌</a></i></p></loadingtext>'
                     })
                 
             } else {
