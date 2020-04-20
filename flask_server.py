@@ -76,10 +76,11 @@ def upload_file():
                 ext = [w, h][np.argmax([w, h])]
                 ext=int(ext*1.15)
                 x=int(x-0.5*int(ext-w))
-                if x < 0:
-                    x =x
+                if x_new < 0:
+                    x = 0
                 if y < 0:
-                    y=y
+                    y = y
+                ext=np.min(y+ext, x+ext)
                 imageFace= img[y:y+ext, x:x+ext, :]
 
             imageFace = cv2.resize(imageFace, dsize=(350, 350))
