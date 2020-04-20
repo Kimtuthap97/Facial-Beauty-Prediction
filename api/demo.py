@@ -7,8 +7,11 @@ from torchvision import transforms
 import numpy as np
 import PIL
 import os
+import glob
 from os.path import join, dirname, realpath
 import cv2
+import random
+makeup_path = './makeup_images'
 
 FOLDER = join(dirname(realpath(__file__)))
 
@@ -37,13 +40,17 @@ def to_var(x, requires_grad=True):
     
     output: fake_A (256x256x3)
 """
-def test(img_A, img_B='makeup2.png', path='245_2520_G.pth'):
+def test(img_A, path='248_2520_G.pth'):
     start = time.time()
     transform = transforms.Compose([transforms.Resize(256),
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])])
     transform_mask = transforms.Compose([transforms.Resize(256, interpolation=PIL.Image.NEAREST),ToTensor])
     img_A = transform(Image.open(os.path.join(FOLDER, img_A)))
+
+    list_makeup = glob.glob(os.path.join(FOLDER, makeup_path, '*.png'))
+    print(os.path.join(FOLDER, makeup_path, '*.png'))
+    img_B = random.choice(list_makeup)
     img_B = transform(Image.open(os.path.join(FOLDER, img_B)))
     model = net.Generator_branch(64, 6)
     if torch.cuda.is_available():
