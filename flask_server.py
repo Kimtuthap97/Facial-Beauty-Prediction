@@ -61,6 +61,7 @@ def upload_file():
             image_location = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             f.save(image_location)
             img = cv2.cvtColor(cv2.imread(image_location), cv2.COLOR_BGR2RGB)
+            img_w, img_h = img.shape[0], img.shape[1]
             detector = MTCNN()
             faces=detector.detect_faces(img)
             if len(faces) == 0:
@@ -79,10 +80,11 @@ def upload_file():
                 if x < 0:
                     x = 0
                 if y < 0:
-                    y = y
-                ext=int(np.min([y+ext, x+ext]))
+                    y = 0
+                ext=int(np.min([y+ext, x+ext, img_w, img_h]))
                 # print('ext', ext)
                 imageFace= img[y:y+ext, x:x+ext, :]
+                # print(x, y, ext, img_w, img_h)
                 imageFace = cv2.resize(imageFace, dsize=(350, 350))
             im = Image.fromarray(imageFace)
             face_location = os.path.join(app.config['UPLOAD_FOLDER'], filename)
