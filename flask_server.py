@@ -82,9 +82,7 @@ def upload_file():
                 if y < 0:
                     y = 0
                 ext=int(np.min([y+ext, x+ext, img_w, img_h]))
-                # print('ext', ext)
                 imageFace= img[y:y+ext, x:x+ext, :]
-                # print(x, y, ext, img_w, img_h)
                 imageFace = cv2.resize(imageFace, dsize=(350, 350))
             im = Image.fromarray(imageFace)
             face_location = os.path.join(app.config['UPLOAD_FOLDER'], filename)
