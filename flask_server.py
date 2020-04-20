@@ -74,12 +74,12 @@ def upload_file():
                 faces = faces[0]['box']
                 x, y, w, h = faces[0], faces[1], faces[2], faces[3]
                 ext = [w, h][np.argmax([w, h])]
-                ext=int(ext*1.2)
+                ext=int(ext*1.15)
                 x=int(x-0.5*int(ext-w))
                 if x < 0:
-                    x =0
+                    x =x
                 if y < 0:
-                    y=0
+                    y=y
                 imageFace= img[y:y+ext, x:x+ext, :]
 
             imageFace = cv2.resize(imageFace, dsize=(350, 350))
