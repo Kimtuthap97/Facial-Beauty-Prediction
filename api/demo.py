@@ -73,7 +73,7 @@ def test(img_A, path='290_1260_G.pth'):
     result[:, :, 2]=de_norm(fake_A.detach()[0]).numpy()[2]
     result = cv2.resize(result, (350, 350))
     result = cv2.normalize(result, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
-    result = result.astype(np.uint8)
+    # result = result.astype(np.uint8)
     duration = round(time.time()-start, 3)
     # print('Done in {0} s'.format(duration))
     return result, duration
