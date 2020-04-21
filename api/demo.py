@@ -40,7 +40,7 @@ def to_var(x, requires_grad=True):
     
     output: fake_A (256x256x3)
 """
-def test(img_A, path='248_2520_G.pth'):
+def test(img_A, path='290_1260_G.pth'):
     start = time.time()
     transform = transforms.Compose([transforms.Resize(256),
                                     transforms.ToTensor(),
