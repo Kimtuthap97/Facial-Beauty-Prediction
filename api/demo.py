@@ -40,7 +40,7 @@ def to_var(x, requires_grad=True):
     
     output: fake_A (256x256x3)
 """
-def test(img_A, path='301_2520_G.pth'):
+def test(img_A, path='300_2520_G.pth'):
     start = time.time()
     transform = transforms.Compose([transforms.Resize(256),
                                     transforms.ToTensor(),
@@ -65,12 +65,14 @@ def test(img_A, path='301_2520_G.pth'):
 
     # Get makeup result
     fake_A, fake_B = model(real_org, real_ref)
+    rec_B, rec_A = model(fake_B, fake_A)
+    # fake_A, fake_B = model(real_org, real_ref)
     # rec_B, rec_A = model(fake_B, fake_A)
     del model
     result=np.zeros((256, 256, 3))
-    result[:, :, 0]=de_norm(fake_A.detach()[0]).numpy()[0]
-    result[:, :, 1]=de_norm(fake_A.detach()[0]).numpy()[1]
-    result[:, :, 2]=de_norm(fake_A.detach()[0]).numpy()[2]
+    result[:, :, 0]=de_norm(fake_B.detach()[0]).numpy()[0]
+    result[:, :, 1]=de_norm(fake_B.detach()[0]).numpy()[1]
+    result[:, :, 2]=de_norm(fake_B.detach()[0]).numpy()[2]
     result = cv2.resize(result, (256, 256))
     result = cv2.normalize(result, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
     # result = result.astype(np.uint8)
