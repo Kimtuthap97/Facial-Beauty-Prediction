@@ -40,7 +40,7 @@ def to_var(x, requires_grad=True):
     
     output: fake_A (256x256x3)
 """
-def test(img_A, path='33_2520_G.pth'):
+def test(img_A, path='70_2520_G.pth'):
     start = time.time()
     transform = transforms.Compose([transforms.Resize(256),
                                     transforms.ToTensor(),
@@ -52,6 +52,7 @@ def test(img_A, path='33_2520_G.pth'):
     print(os.path.join(FOLDER, makeup_path, '*.png'))
     img_B = random.choice(list_makeup)
     img_B = transform(Image.open(os.path.join(FOLDER, img_B)))
+    # img_B = transform(Image.open(os.path.join(FOLDER, makeup_path, 'XMY-066.png')))
     model = net.Generator_branch(64, 6)
     if torch.cuda.is_available():
         model.load_state_dict(torch.load(os.path.join(FOLDER, path)))
@@ -73,10 +74,11 @@ def test(img_A, path='33_2520_G.pth'):
     result[:, :, 0]=de_norm(fake_A.detach()[0]).numpy()[0]
     result[:, :, 1]=de_norm(fake_A.detach()[0]).numpy()[1]
     result[:, :, 2]=de_norm(fake_A.detach()[0]).numpy()[2]
-    result = cv2.resize(result, (256, 256))
+    result = cv2.resize(result, (351, 351), cv2.INTER_NEAREST)
     result = cv2.normalize(result, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
-    # result = result.astype(np.uint8)
+    result = result.astype(np.uint8)
     duration = round(time.time()-start, 3)
+
     # print('Done in {0} s'.format(duration))
     return result, duration
 
