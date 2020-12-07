@@ -1,4 +1,4 @@
-# Update: This repo is out-of-date. Check out my new website here: https://thaoshibe.github.io/projects/
+# Update: This repo is out-of-date. Check out my new website here: https://thaoshibe.github.io/
 
 It's 23:44PM, I don't want to write anything so...
 
